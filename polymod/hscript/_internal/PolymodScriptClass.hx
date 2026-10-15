@@ -487,7 +487,8 @@ class PolymodScriptClass
         _superClass = _superClass.superClass;
       }
 
-      __superClassFieldList = __superClassFieldList.concat(Reflect.fields(_superClass));
+      // 不用 Reflect.fields。网页上 FlxRuntimeShader 会把 uniform 名（例如 iTime）动态挂到实例上，
+      // 那不是父类声明的字段。脚本里同名属性是给 setFloat 用的，不该当成重复定义。
       __superClassFieldList = __superClassFieldList.concat(Type.getInstanceFields(Type.getClass(_superClass)));
     }
     return __superClassFieldList.indexOf(name) != -1;

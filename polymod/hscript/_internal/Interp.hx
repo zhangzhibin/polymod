@@ -1192,6 +1192,14 @@ class Interp
       }
     }
 
+    // Haxe 顶层类可以不写 import。Reflect 和 Type 在这里换成沙箱别名，避免脚本直接碰到被禁的类。
+    if (PolymodScriptClass.importOverrides.exists(id))
+    {
+      var aliased:Null<Class<Dynamic>> = PolymodScriptClass.importOverrides.get(id);
+      if (aliased == null) error(EBlacklistedModule(id));
+      return aliased;
+    }
+
     // Allow access to scripted classes for calling static functions.
 
     if (getClassDecl().name == id)
